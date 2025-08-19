@@ -1,0 +1,18 @@
+POST http://localhost:8080/members/signup
+Content-Type: application/json
+
+{
+  "email": "wlsqkrtk11@naver.com",
+  "nickName": "ㅇㅇ"
+}
+
+###
+POST http://localhost:8080/members/login
+Content-Type: application/json
+
+{
+  "email": "wlsqkrtk11@naver.com",
+  "code": "UV3NO9"
+}
+
+###

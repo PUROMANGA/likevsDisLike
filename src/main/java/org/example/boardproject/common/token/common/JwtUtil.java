@@ -1,13 +1,14 @@
-package org.example.boardproject.common.token;
+package org.example.boardproject.common.token.common;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Base64;
@@ -17,7 +18,6 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtUtil {
-    private final UserDetailsService userDetailsService;
     private static final String BEARER_PREFIX  = "Bearer ";
 
     @Value("${jwt.refreshToken.time}")
@@ -72,5 +72,23 @@ public class JwtUtil {
             log.warn("JWT 토큰이 비어있습니다.");
         }
         return false;
+    }
+
+    public String resolveToken(HttpServletRequest req) {
+        String bearerToken = req.getHeader(BEARER_PREFIX);
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
+        }
+
+        return null;
+    }
+
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

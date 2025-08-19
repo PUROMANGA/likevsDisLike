@@ -1,4 +1,4 @@
-package org.example.boardproject.common.token;
+package org.example.boardproject.common.token.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.member.entity.Member;

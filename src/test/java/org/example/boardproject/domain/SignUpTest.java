@@ -1,22 +1,29 @@
 package org.example.boardproject.domain;
 
-import lombok.extern.slf4j.Slf4j;
+import org.example.boardproject.api.member.dto.addmemberdto.RequestAddMemberDto;
+import org.example.boardproject.api.member.entity.Member;
+import org.example.boardproject.api.member.repository.MemberRepository;
 import org.example.boardproject.api.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.SimpleMailMessage;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Slf4j
 public class SignUpTest {
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     void 이메일_전송_테스트() {
         String email = "wlsqkrtk11@naver.com";
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
+        String nickname = "ㅇㅇ";
+        RequestAddMemberDto requestAddMemberDto = new RequestAddMemberDto(email, nickname);
+        memberService.addMemberService(requestAddMemberDto);
+        String foundEmail = memberRepository.findById(1L).map(Member::getEmail).orElseThrow(() -> new RuntimeException("해당 유저가 존재하지 않습니다."));
+        assertThat(foundEmail).isEqualTo(email);
     }
 }

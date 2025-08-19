@@ -1,4 +1,4 @@
-package org.example.boardproject.api.topic.common;
+package org.example.boardproject.api.topic.enums;
 
 import lombok.Getter;
 

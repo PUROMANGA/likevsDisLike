@@ -1,4 +1,7 @@
 package org.example.boardproject.common.token.service;
 
-public class TokenService {
+import org.example.boardproject.common.token.common.LoginTokens;
+
+public interface TokenService {
+    LoginTokens login(String email);
 }

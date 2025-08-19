@@ -1,7 +1,7 @@
-package org.example.boardproject.api.topic.dto;
+package org.example.boardproject.api.topic.dto.create.dto;
 
 import lombok.Getter;
-import org.example.boardproject.api.topic.common.Genre;
+import org.example.boardproject.api.topic.enums.Genre;
 import org.example.boardproject.api.topic.entity.Topic;
 
 import java.time.LocalDateTime;

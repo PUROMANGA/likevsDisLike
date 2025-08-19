@@ -1,4 +1,4 @@
-package org.example.boardproject.common.token;
+package org.example.boardproject.common.token.common;
 
 import lombok.Getter;
 
