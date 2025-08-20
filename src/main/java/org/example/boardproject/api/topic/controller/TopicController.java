@@ -25,19 +25,19 @@ import org.springframework.web.bind.annotation.*;
 public class TopicController {
     private final TopicService topicService;
 
-    @PostMapping
+    @PostMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseCreateTopic> createTopic(@RequestBody @Valid RequestCreateTopic requestCreateTopic) {
         return ResponseEntity.ok(topicService.createTopicService(requestCreateTopic));
     }
 
-    @PatchMapping
+    @PatchMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponsePatchTopic> patchTopic(@RequestBody @Valid RequestPatchTopic requestPatchTopic) {
         return ResponseEntity.ok(topicService.patchTopicService(requestPatchTopic));
     }
 
-    @DeleteMapping("/{topicId}")
+    @DeleteMapping("/admin/{topicId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteTopic(@PathVariable Long topicId) {
         topicService.deleteTopicService(topicId);

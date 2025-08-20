@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.example.boardproject.api.topic.enums.Genre;
 import org.example.boardproject.api.topic.dto.create.dto.RequestCreateTopic;
 import org.example.boardproject.api.topic.dto.patch.dto.RequestPatchTopic;
+import org.example.boardproject.api.vote.entity.Vote;
+import org.example.boardproject.api.vote.enums.VoteType;
 import org.example.boardproject.common.base.BaseEntity;
 
 @Entity
@@ -40,5 +42,35 @@ public class Topic extends BaseEntity {
     public void update(RequestPatchTopic requestPatchTopic) {
         this.title = requestPatchTopic.getNewTopicName();
         this.genre = requestPatchTopic.getNewGenre();
+    }
+
+    public void updateCount(Vote vote) {
+        if (vote.getVoteType().equals(VoteType.LIKE)) {
+            this.increaseLikeCount();
+        } else {
+            this.increaseDisLikeCount();
+        }
+
+        this.increaseCount();
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
+
+    public void increaseDisLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseDisLikeCount() {
+        this.likeCount--;
+    }
+
+    public void increaseCount() {
+        this.engagementCount++;
     }
 }
