@@ -36,7 +36,6 @@ public class CommentController {
         return ResponseEntity.ok(commentService.createLikeCommentService(requestCreateLikeComment));
     }
 
-
     @DeleteMapping("/{commentId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
