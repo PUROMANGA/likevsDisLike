@@ -1,0 +1,31 @@
+@topicId=1
+@commentId=1
+
+### 특정 토픽에 대한 코멘트 불러오기(메인)✅
+GET http://localhost:8080/comments/{{topicId}}
+Content-Type: application/json
+
+### 코멘트 기능✅
+POST http://localhost:8080/comments/{{topicId}}
+Content-Type: application/json
+
+{
+  "content": "이거 개명작게임임",
+  "name": ""
+}
+
+### 코멘트 좋아요/싫어요 기능✅
+POST http://localhost:8080/comments/like/{{commentId}}
+Content-Type: application/json
+
+{
+  "commentType" : "LIKE"
+}
+
+### 코멘트 삭제기능(어드민 전용) : 실패✅
+DELETE http://localhost:8080/comments/{{commentId}}
+Content-Type: application/json
+
+### 특정 토픽에 대한 코멘트 불러오기(메인)✅
+GET http://localhost:8080/comments/{{topicId}}
+Content-Type: application/json

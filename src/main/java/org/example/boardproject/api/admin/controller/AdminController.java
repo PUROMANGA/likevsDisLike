@@ -32,4 +32,5 @@ public class AdminController {
         adminService.logoutAdminService(request, response);
         return ResponseEntity.ok("로그아웃이 완료되었습니다.");
     }
+    
 }

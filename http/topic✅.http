@@ -1,0 +1,41 @@
+@topicId=1
+
+### 토픽 만들기 : 어드민✅
+POST http://localhost:8080/topics/admin
+Content-Type: application/json
+
+{
+  "topicName": "부활",
+  "genre" : "NOVEL"
+}
+
+### 토픽 수정 : 어드민✅
+PATCH http://localhost:8080/topics/admin/{{topicId}}
+Content-Type: application/json
+
+{
+  "newTopicName": "활부",
+  "newGenre" : "NOVEL"
+}
+
+### 토픽 삭제 : 어드민✅
+DELETE http://localhost:8080/topics/admin/{{topicId}}
+Content-Type: application/json
+
+### 메인페이지 : 인기토픽 조회✅
+GET http://localhost:8080/topics
+Content-Type: application/json
+
+### 검색 : 특정 장르 검색✅
+@genre = NOVEL
+GET http://localhost:8080/topics/genres?genre={{genre}}
+Content-Type: application/json
+
+### 검색 : 특정 타이틀 검색✅
+@title = 활부
+GET http://localhost:8080/topics/titles?title={{title}}
+Content-Type: application/json
+
+### 특정 토픽에 대한 페이지✅
+GET http://localhost:8080/topics/{{topicId}}
+Content-Type: application/json

@@ -35,5 +35,14 @@ public enum Genre {
     FESTIVAL,       // 페스티벌
 
     // 기타 미디어
-    YOUTUBE_CONTENT // 유튜브/스트리밍 콘텐츠
+    YOUTUBE_CONTENT; // 유튜브/스트리밍 콘텐츠
+
+    public static Genre checkGenre(String genre) {
+        for(Genre g : Genre.values()) {
+            if(g.name().equalsIgnoreCase(genre)) {
+                return g;
+            }
+        }
+        throw new IllegalArgumentException("Genre " + genre + " not found");
+    }
 }

@@ -1,6 +1,7 @@
 package org.example.boardproject.api.topic.repository;
 
 import org.example.boardproject.api.topic.entity.Topic;
+import org.example.boardproject.api.topic.enums.Genre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,7 +60,7 @@ public interface TopicRepository extends JpaRepository<Topic,Long> {
             "from Topic t " +
             "where t.genre =:genre " +
             "order by t.createdDate desc ")
-    Page<Topic> findByGenre(String genre, Pageable pageable);
+    Page<Topic> findByGenre(Genre genre, Pageable pageable);
 
     @Query("select t " +
             "from Topic t " +

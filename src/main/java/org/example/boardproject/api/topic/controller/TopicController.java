@@ -31,10 +31,11 @@ public class TopicController {
         return ResponseEntity.ok(topicService.createTopicService(requestCreateTopic));
     }
 
-    @PatchMapping("/admin")
+    @PatchMapping("/admin/{topicId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponsePatchTopic> patchTopic(@RequestBody @Valid RequestPatchTopic requestPatchTopic) {
-        return ResponseEntity.ok(topicService.patchTopicService(requestPatchTopic));
+    public ResponseEntity<ResponsePatchTopic> patchTopic(@RequestBody @Valid RequestPatchTopic requestPatchTopic,
+                                                         @PathVariable Long topicId) {
+        return ResponseEntity.ok(topicService.patchTopicService(requestPatchTopic, topicId));
     }
 
     @DeleteMapping("/admin/{topicId}")

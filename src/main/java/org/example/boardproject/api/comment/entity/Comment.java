@@ -35,11 +35,11 @@ public class Comment extends BaseEntity {
     private Long likeCount;
     private Long disLikeCount;
 
-    public Comment(String ip, Topic topic, RequestCreateComment requestCreateComment, String browserId) {
+    public Comment(String ip, Topic topic, RequestCreateComment requestCreateComment, String browserId, VoteType voteType) {
         this.topic = topic;
         this.browserId = browserId;
         this.ip = ip;
-        this.voteType = requestCreateComment.getVoteType();
+        this.voteType = voteType;
 
         if(requestCreateComment.getName() != null) {
             this.name = requestCreateComment.getName();

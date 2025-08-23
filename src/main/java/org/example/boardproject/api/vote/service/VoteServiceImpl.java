@@ -21,9 +21,12 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     @Transactional
-    public ResponseVoteCreateDto createVoteService(RequestVoteCreateDto requestVoteCreateDto, HttpServletRequest request, String browserId) {
-        Topic topic = topicRepository.findById(requestVoteCreateDto.getTopicId()).orElseThrow(() -> new RuntimeException("topic not found"));
+    public ResponseVoteCreateDto createVoteService(Long topicId, RequestVoteCreateDto requestVoteCreateDto, HttpServletRequest request, String browserId) {
+        Topic topic = topicRepository.findById(topicId).orElseThrow(() -> new RuntimeException("topic not found"));
         String ip = voteServiceHandler.createIp(request);
+        if(voteRepository.existsByBrowserIdAndTopicId(browserId, topicId)) {
+            throw new RuntimeException("topic already exists");
+        }
         Vote vote = new Vote(topic, browserId, ip, requestVoteCreateDto.getVoteType());
         voteRepository.save(vote);
         topic.updateCount(vote);

@@ -11,6 +11,7 @@ import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicDto;
 import org.example.boardproject.api.topic.dto.patch.dto.RequestPatchTopic;
 import org.example.boardproject.api.topic.dto.patch.dto.ResponsePatchTopic;
 import org.example.boardproject.api.topic.entity.Topic;
+import org.example.boardproject.api.topic.enums.Genre;
 import org.example.boardproject.api.topic.repository.TopicRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -40,8 +41,8 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
-    public ResponsePatchTopic patchTopicService(RequestPatchTopic requestPatchTopic) {
-        Topic topic = topicRepository.findById(requestPatchTopic.getId()).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
+    public ResponsePatchTopic patchTopicService(RequestPatchTopic requestPatchTopic, Long topicId) {
+        Topic topic = topicRepository.findById(topicId).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
         topic.update(requestPatchTopic);
         topicRepository.save(topic);
         return new ResponsePatchTopic(topic);
@@ -76,12 +77,13 @@ public class TopicServiceImpl implements TopicService {
     @Override
     @Transactional(readOnly = true)
     public ResponseGetGenreTopicList getGenreTopicService(String genre, Pageable pageable) {
+        Genre checkedGenre = Genre.checkGenre(genre);
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime oneHourAgo = now.minusHours(1);
         List<ResponseTopicDto> likeTopicList = topicRepository.findTop10ByGenreAndCreatedDateBetweenOrderByLikeCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
         List<ResponseTopicDto> disLikeTopicList = topicRepository.findTop10ByGenreAndCreatedDateBetweenOrderByDislikeCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
         List<ResponseTopicDto> finalTopicList = topicRepository.findTop10ByGenreAndCreatedDateBetweenOrderByEngagementCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
-        Page<ResponseTopicDto> topicList = topicRepository.findByGenre(genre, pageable).map(ResponseTopicDto::new);
+        Page<ResponseTopicDto> topicList = topicRepository.findByGenre(checkedGenre, pageable).map(ResponseTopicDto::new);
         return new ResponseGetGenreTopicList(likeTopicList, disLikeTopicList, finalTopicList, topicList);
     }
 

@@ -24,16 +24,18 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/{topicId}")
     public ResponseEntity<ResponseCreateComment> createComment(HttpServletRequest request,
                                                                @RequestBody @Valid RequestCreateComment requestCreateComment,
-                                                               @CookieValue(value = "browserId", required = false) String browserId) {
-        return ResponseEntity.ok(commentService.createCommentService(request, requestCreateComment, browserId));
+                                                               @CookieValue(value = "browserId", required = false) String browserId,
+                                                               @PathVariable Long topicId) {
+        return ResponseEntity.ok(commentService.createCommentService(request, requestCreateComment, browserId, topicId));
     }
 
-    @PostMapping("/like")
-    public ResponseEntity<ResponseCreateComment> createLikeComment(@RequestBody @Valid RequestCreateLikeComment requestCreateLikeComment) {
-        return ResponseEntity.ok(commentService.createLikeCommentService(requestCreateLikeComment));
+    @PostMapping("/like/{commentId}")
+    public ResponseEntity<ResponseCreateComment> createLikeComment(@RequestBody @Valid RequestCreateLikeComment requestCreateLikeComment,
+                                                                   @PathVariable Long commentId) {
+        return ResponseEntity.ok(commentService.createLikeCommentService(requestCreateLikeComment, commentId));
     }
 
     @DeleteMapping("/{commentId}")

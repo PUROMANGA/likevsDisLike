@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface TopicService {
     ResponseCreateTopic createTopicService(RequestCreateTopic requestCreateTopic);
-    ResponsePatchTopic patchTopicService(RequestPatchTopic requestPatchTopic);
+    ResponsePatchTopic patchTopicService(RequestPatchTopic requestPatchTopic, Long topicId);
     void deleteTopicService(Long topicId);
     ResponseGetTopicList getAllTopicService(String browserId, HttpServletResponse response);
     ResponseGetGenreTopicList getGenreTopicService(String genre, Pageable pageable);

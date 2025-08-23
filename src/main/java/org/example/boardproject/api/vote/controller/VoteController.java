@@ -16,10 +16,10 @@ public class VoteController {
 
     private final VoteService voteService;
 
-    @PostMapping
+    @PostMapping("/{topicId}")
     public ResponseEntity<ResponseVoteCreateDto> createVote(
-            @RequestBody @Valid RequestVoteCreateDto requestVoteCreateDto,
+            @PathVariable Long topicId, @RequestBody @Valid RequestVoteCreateDto requestVoteCreateDto,
             HttpServletRequest request, @CookieValue(value = "browserId", required = false) String browserId) {
-        return ResponseEntity.ok(voteService.createVoteService(requestVoteCreateDto, request, browserId));
+        return ResponseEntity.ok(voteService.createVoteService(topicId, requestVoteCreateDto, request, browserId));
     }
 }
