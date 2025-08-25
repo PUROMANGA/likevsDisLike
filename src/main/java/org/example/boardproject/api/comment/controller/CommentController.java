@@ -38,10 +38,10 @@ public class CommentController {
         return ResponseEntity.ok(commentService.createLikeCommentService(requestCreateLikeComment, commentId));
     }
 
-    @DeleteMapping("/{commentId}")
+    @PatchMapping("/{commentId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteCommentService(commentId);
+    public ResponseEntity<String> patchComment(@PathVariable Long commentId) {
+        commentService.patchCommentService(commentId);
         return ResponseEntity.ok("삭제가 완료되었습니다.");
     }
 

@@ -23,6 +23,13 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final VoteServiceHandler voteServiceHandler;
 
+    /**
+     * 게시글 생성
+     * @param requestCreatePost
+     * @param request
+     * @param browserId
+     * @return
+     */
     @Override
     @Transactional
     public ResponseCreatePost createPostService(RequestCreatePost requestCreatePost, HttpServletRequest request, String browserId) {
@@ -32,10 +39,16 @@ public class PostServiceImpl implements PostService {
         return new ResponseCreatePost(post);
     }
 
+    /**
+     * 게시글 수정
+     * @param requestUpdatePost
+     * @param postId
+     * @return
+     */
     @Override
     @Transactional
     public ResponseUpdatePost updatePostService(RequestUpdatePost requestUpdatePost, Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("postId not found"));
+        Post post = postRepository.findByIdForUpdate(postId).orElseThrow(() -> new RuntimeException("postId not found"));
 
         if(!post.getPassword().equals(requestUpdatePost.getPassword())) {
             throw new RuntimeException("password not match");
@@ -46,12 +59,24 @@ public class PostServiceImpl implements PostService {
         return new ResponseUpdatePost(post);
     }
 
+    /**
+     * 게시글 전체 조회
+     * @param pageable
+     * @return
+     */
+
     @Override
     @Transactional(readOnly = true)
     public Page<ResponseGetPost> getAllPostService(Pageable pageable) {
         return postRepository.findAll(pageable).map(ResponseGetPost::new);
     }
 
+    /**
+     * 게시글 단일 조회
+     * @param postId
+     * @param requestPwDto
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public ResponseGetPost getPostService(Long postId, RequestPwDto requestPwDto) {
@@ -62,10 +87,15 @@ public class PostServiceImpl implements PostService {
         return new ResponseGetPost(post);
     }
 
+    /**
+     * 게시글 삭제
+     * @param postId
+     * @param requestPwDto
+     */
     @Override
     @Transactional
     public void deletePostService(Long postId, RequestPwDto requestPwDto) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("postId not found"));
+        Post post = postRepository.findByIdForUpdate(postId).orElseThrow(() -> new RuntimeException("postId not found"));
         if(!post.getPassword().equals(requestPwDto.getPw())) {
             throw new RuntimeException("password not match");
         }

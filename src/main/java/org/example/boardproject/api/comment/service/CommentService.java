@@ -12,6 +12,6 @@ import org.springframework.data.domain.Slice;
 public interface CommentService {
     ResponseCreateComment createCommentService(HttpServletRequest request, @Valid RequestCreateComment requestCreateComment, String browserId, Long topicId);
     ResponseCreateComment createLikeCommentService(RequestCreateLikeComment requestCreateLikeComment, Long commentId);
-    void deleteCommentService(Long commentId);
+    void patchCommentService(Long commentId);
     Slice<ResponseGetComment> getCommentService(Long topicId, Pageable pageable);
 }

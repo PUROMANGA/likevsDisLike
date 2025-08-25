@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public ResponseCreateComment createLikeCommentService(RequestCreateLikeComment requestCreateLikeComment, Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("comment not found"));
+        Comment comment = commentRepository.findByIdForUpdate(commentId).orElseThrow(() -> new RuntimeException("comment not found"));
         comment.update(requestCreateLikeComment);
         commentRepository.save(comment);
         return new  ResponseCreateComment(comment);
@@ -48,8 +48,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteCommentService(Long commentId) {
-        commentRepository.deleteById(commentId);
+    public void patchCommentService(Long commentId) {
+        Comment comment = commentRepository.findByIdForUpdate(commentId).orElseThrow(() -> new RuntimeException("comment not found"));
+        comment.delete("삭제된 댓글입니다.");
+        commentRepository.save(comment);
     }
 
     @Override

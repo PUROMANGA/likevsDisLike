@@ -31,6 +31,11 @@ public class TopicServiceImpl implements TopicService {
     private final TopicRepository topicRepository;
     private final ScheduledTopic scheduledTopic;
 
+    /**
+     * 토픽 생성
+     * @param requestCreateTopic
+     * @return
+     */
     @Override
     @Transactional
     public ResponseCreateTopic createTopicService(RequestCreateTopic requestCreateTopic) {
@@ -39,21 +44,39 @@ public class TopicServiceImpl implements TopicService {
         return new ResponseCreateTopic(topic);
     }
 
+    /**
+     * 토픽 수정
+     * @param requestPatchTopic
+     * @param topicId
+     * @return
+     */
     @Override
     @Transactional
     public ResponsePatchTopic patchTopicService(RequestPatchTopic requestPatchTopic, Long topicId) {
-        Topic topic = topicRepository.findById(topicId).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
+        Topic topic = topicRepository.findByIdForUpdate(topicId).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
         topic.update(requestPatchTopic);
         topicRepository.save(topic);
         return new ResponsePatchTopic(topic);
     }
 
+    /**
+     * 토픽 삭제
+     * @param topicId
+     */
     @Override
     @Transactional
     public void deleteTopicService(Long topicId) {
-        topicRepository.deleteById(topicId);
+        Topic topic = topicRepository.findByIdForUpdate(topicId).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
+        topicRepository.delete(topic);
     }
 
+    /**
+     * 토픽 랭킹(미리 캐시한 곳에서 가져오기)
+     * 우리 사이트의 메인 페이지
+     * @param browserId
+     * @param response
+     * @return
+     */
     @Override
     @Cacheable(cacheNames = "topicRanking", key = "'TopicList'")
     @Transactional(readOnly = true)
@@ -74,6 +97,12 @@ public class TopicServiceImpl implements TopicService {
         return scheduledTopic.createRealTimeTopicRanking();
     }
 
+    /**
+     * 특정 장르의 토픽을 클릭했을 때 랭킹으로 보여줌
+     * @param genre
+     * @param pageable
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public ResponseGetGenreTopicList getGenreTopicService(String genre, Pageable pageable) {
@@ -87,15 +116,26 @@ public class TopicServiceImpl implements TopicService {
         return new ResponseGetGenreTopicList(likeTopicList, disLikeTopicList, finalTopicList, topicList);
     }
 
+    /**
+     * 특정 title의 토픽을 검색했을 때 토픽을 보여줌.
+     * @param title
+     * @param pageable
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<ResponseTopicDto> getTitlesService(String title, Pageable pageable) {
         return topicRepository.findByTitle(title, pageable).map(ResponseTopicDto::new);
     }
 
+    /**
+     * 특정 토픽을 보여줌(댓글은 보여주기 전)
+     * @param topicId
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public ResponseTopicDto getTopicService(Long topicId) {
-        return topicRepository.findById(topicId).map(ResponseTopicDto::new).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
+        return topicRepository.findByIdForUpdate(topicId).map(ResponseTopicDto::new).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
     }
 }
