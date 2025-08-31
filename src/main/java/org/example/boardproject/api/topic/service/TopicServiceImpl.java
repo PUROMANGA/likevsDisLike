@@ -8,11 +8,16 @@ import org.example.boardproject.api.topic.dto.create.dto.ResponseCreateTopic;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseGetGenreTopicList;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseGetTopicList;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicDto;
+import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicRankingDto;
 import org.example.boardproject.api.topic.dto.patch.dto.RequestPatchTopic;
 import org.example.boardproject.api.topic.dto.patch.dto.ResponsePatchTopic;
 import org.example.boardproject.api.topic.entity.Topic;
 import org.example.boardproject.api.topic.enums.Genre;
 import org.example.boardproject.api.topic.repository.TopicRepository;
+import org.example.boardproject.api.topic_count.entity.TopicCount;
+import org.example.boardproject.api.topic_count.repository.TopicCountRepository;
+import org.example.boardproject.common.error.CustomRuntimeException;
+import org.example.boardproject.common.error.ErrorResponseStatus;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +34,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TopicServiceImpl implements TopicService {
     private final TopicRepository topicRepository;
+    private final TopicCountRepository topicCountRepository;
     private final ScheduledTopic scheduledTopic;
 
     /**
@@ -66,7 +72,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     @Transactional
     public void deleteTopicService(Long topicId) {
-        Topic topic = topicRepository.findByIdForUpdate(topicId).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
+        Topic topic = topicRepository.findByIdForUpdate(topicId).orElseThrow(() -> new CustomRuntimeException(ErrorResponseStatus.NOT_FOUND));
         topicRepository.delete(topic);
     }
 
@@ -109,10 +115,10 @@ public class TopicServiceImpl implements TopicService {
         Genre checkedGenre = Genre.checkGenre(genre);
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime oneHourAgo = now.minusHours(1);
-        List<ResponseTopicDto> likeTopicList = topicRepository.findTop10ByGenreAndCreatedDateBetweenOrderByLikeCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
-        List<ResponseTopicDto> disLikeTopicList = topicRepository.findTop10ByGenreAndCreatedDateBetweenOrderByDislikeCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
-        List<ResponseTopicDto> finalTopicList = topicRepository.findTop10ByGenreAndCreatedDateBetweenOrderByEngagementCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
-        Page<ResponseTopicDto> topicList = topicRepository.findByGenre(checkedGenre, pageable).map(ResponseTopicDto::new);
+        List<ResponseTopicRankingDto> likeTopicList = topicCountRepository.findTop10ByGenreAndCreatedDateBetweenOrderByLikeCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicRankingDto::new).toList();
+        List<ResponseTopicRankingDto> disLikeTopicList = topicCountRepository.findTop10ByGenreAndCreatedDateBetweenOrderByDislikeCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicRankingDto::new).toList();
+        List<ResponseTopicRankingDto> finalTopicList = topicCountRepository.findTop10ByGenreAndCreatedDateBetweenOrderByEngagementCountDesc(genre, oneHourAgo, now).stream().map(ResponseTopicRankingDto::new).toList();
+        Page<ResponseTopicRankingDto> topicList = topicRepository.findByGenre(checkedGenre, pageable).map(ResponseTopicRankingDto::new);
         return new ResponseGetGenreTopicList(likeTopicList, disLikeTopicList, finalTopicList, topicList);
     }
 
@@ -124,8 +130,8 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<ResponseTopicDto> getTitlesService(String title, Pageable pageable) {
-        return topicRepository.findByTitle(title, pageable).map(ResponseTopicDto::new);
+    public Page<ResponseTopicRankingDto> getTitlesService(String title, Pageable pageable) {
+        return topicRepository.findByTitle(title, pageable).map(ResponseTopicRankingDto::new);
     }
 
     /**
@@ -136,6 +142,8 @@ public class TopicServiceImpl implements TopicService {
     @Override
     @Transactional(readOnly = true)
     public ResponseTopicDto getTopicService(Long topicId) {
-        return topicRepository.findByIdForUpdate(topicId).map(ResponseTopicDto::new).orElseThrow(() -> new RuntimeException("해당 토픽이 존재하지 않습니다."));
+        Topic topic = topicRepository.findById(topicId).orElseThrow(() -> new CustomRuntimeException(ErrorResponseStatus.NOT_FOUND));
+        TopicCount topicCount = topicCountRepository.findByTopicId(topicId).orElseThrow(() -> new CustomRuntimeException(ErrorResponseStatus.NOT_FOUND));
+        return new ResponseTopicDto(topic, topicCount);
     }
 }

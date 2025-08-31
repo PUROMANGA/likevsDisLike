@@ -1,4 +1,4 @@
-@topicId=1
+@topicId=50
 
 ### 토픽 만들기 : 어드민✅
 POST http://localhost:8080/topics/admin
@@ -20,22 +20,17 @@ Content-Type: application/json
 
 ### 토픽 삭제 : 어드민✅
 DELETE http://localhost:8080/topics/admin/{{topicId}}
-Content-Type: application/json
 
 ### 메인페이지 : 인기토픽 조회✅
 GET http://localhost:8080/topics
-Content-Type: application/json
 
 ### 검색 : 특정 장르 검색✅
-@genre = NOVEL
+@genre = ESSAY
 GET http://localhost:8080/topics/genres?genre={{genre}}
-Content-Type: application/json
 
 ### 검색 : 특정 타이틀 검색✅
-@title = 활부
+@title = 사랑과전쟁14
 GET http://localhost:8080/topics/titles?title={{title}}
-Content-Type: application/json
 
 ### 특정 토픽에 대한 페이지✅
 GET http://localhost:8080/topics/{{topicId}}
-Content-Type: application/json

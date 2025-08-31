@@ -2,11 +2,9 @@ package org.example.boardproject.api.topic.common;
 
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseGetTopicList;
-import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicDto;
-import org.example.boardproject.api.topic.entity.Topic;
-import org.example.boardproject.api.topic.repository.TopicRepository;
+import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicRankingDto;
+import org.example.boardproject.api.topic_count.repository.TopicCountRepository;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduledTopic {
 
-    private final TopicRepository topicRepository;
+    private final TopicCountRepository topicCountRepository;
 
     /**
      * 매 시 정각마다 실행되어 최근 1시간 동안의 토픽 랭킹 데이터를 조회하고 캐시에 저장한다.
@@ -34,9 +32,9 @@ public class ScheduledTopic {
     public ResponseGetTopicList createRealTimeTopicRanking() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime oneHourAgo = now.minusHours(1);
-        List<ResponseTopicDto> likeTopicList = topicRepository.findTop10ByCreatedDateBetweenOrderByLikeCountDesc(oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
-        List<ResponseTopicDto> disLikeTopicList = topicRepository.findTop10ByCreatedDateBetweenOrderByDislikeCountDesc(oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
-        List<ResponseTopicDto> finalTopicList = topicRepository.findTop10ByCreatedDateBetweenOrderByEngagementCountDesc(oneHourAgo, now).stream().map(ResponseTopicDto::new).toList();
+        List<ResponseTopicRankingDto> likeTopicList = topicCountRepository.findTop10ByCreatedDateBetweenOrderByLikeCountDesc(oneHourAgo, now).stream().map(ResponseTopicRankingDto::new).toList();
+        List<ResponseTopicRankingDto> disLikeTopicList = topicCountRepository.findTop10ByCreatedDateBetweenOrderByDislikeCountDesc(oneHourAgo, now).stream().map(ResponseTopicRankingDto::new).toList();
+        List<ResponseTopicRankingDto> finalTopicList = topicCountRepository.findTop10ByCreatedDateBetweenOrderByEngagementCountDesc(oneHourAgo, now).stream().map(ResponseTopicRankingDto::new).toList();
         return new ResponseGetTopicList(likeTopicList, disLikeTopicList, finalTopicList);
     }
 }

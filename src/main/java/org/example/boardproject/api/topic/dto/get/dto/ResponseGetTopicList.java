@@ -6,11 +6,11 @@ import java.util.List;
 
 @Getter
 public class ResponseGetTopicList {
-    private final List<ResponseTopicDto> likeTopicList;
-    private final List<ResponseTopicDto> disLikeTopicList;
-    private final List<ResponseTopicDto> finalTopicList;
+    private final List<ResponseTopicRankingDto> likeTopicList;
+    private final List<ResponseTopicRankingDto> disLikeTopicList;
+    private final List<ResponseTopicRankingDto> finalTopicList;
 
-    public ResponseGetTopicList(List<ResponseTopicDto> likeTopicList, List<ResponseTopicDto> disLikeTopicList, List<ResponseTopicDto> finalTopicList) {
+    public ResponseGetTopicList(List<ResponseTopicRankingDto> likeTopicList, List<ResponseTopicRankingDto> disLikeTopicList, List<ResponseTopicRankingDto> finalTopicList) {
         this.likeTopicList = likeTopicList;
         this.disLikeTopicList = disLikeTopicList;
         this.finalTopicList = finalTopicList;

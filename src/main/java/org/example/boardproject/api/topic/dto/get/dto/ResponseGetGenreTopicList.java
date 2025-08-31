@@ -7,12 +7,12 @@ import java.util.List;
 
 @Getter
 public class ResponseGetGenreTopicList {
-    private final List<ResponseTopicDto> likeTopicList;
-    private final List<ResponseTopicDto> disLikeTopicList;
-    private final List<ResponseTopicDto> finalTopicList;
-    private final Page<ResponseTopicDto> topicList;
+    private final List<ResponseTopicRankingDto> likeTopicList;
+    private final List<ResponseTopicRankingDto> disLikeTopicList;
+    private final List<ResponseTopicRankingDto> finalTopicList;
+    private final Page<ResponseTopicRankingDto> topicList;
 
-    public ResponseGetGenreTopicList(List<ResponseTopicDto> likeTopicList, List<ResponseTopicDto> disLikeTopicList, List<ResponseTopicDto> finalTopicList, Page<ResponseTopicDto> topicList) {
+    public ResponseGetGenreTopicList(List<ResponseTopicRankingDto> likeTopicList, List<ResponseTopicRankingDto> disLikeTopicList, List<ResponseTopicRankingDto> finalTopicList, Page<ResponseTopicRankingDto> topicList) {
         this.likeTopicList = likeTopicList;
         this.disLikeTopicList = disLikeTopicList;
         this.finalTopicList = finalTopicList;

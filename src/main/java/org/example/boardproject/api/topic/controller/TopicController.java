@@ -8,6 +8,7 @@ import org.example.boardproject.api.topic.dto.create.dto.ResponseCreateTopic;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseGetGenreTopicList;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseGetTopicList;
 import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicDto;
+import org.example.boardproject.api.topic.dto.get.dto.ResponseTopicRankingDto;
 import org.example.boardproject.api.topic.dto.patch.dto.RequestPatchTopic;
 import org.example.boardproject.api.topic.dto.patch.dto.ResponsePatchTopic;
 import org.example.boardproject.api.topic.service.TopicService;
@@ -57,7 +58,7 @@ public class TopicController {
     }
 
     @GetMapping("/titles")
-    public ResponseEntity<Page<ResponseTopicDto>> getTitlesTopic
+    public ResponseEntity<Page<ResponseTopicRankingDto>> getTitlesTopic
     (@RequestParam String title, @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(topicService.getTitlesService(title, pageable));
     }

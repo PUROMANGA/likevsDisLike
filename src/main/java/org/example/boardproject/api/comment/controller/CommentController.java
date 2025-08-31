@@ -1,6 +1,5 @@
 package org.example.boardproject.api.comment.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.comment.dto.create.RequestCreateComment;
@@ -25,11 +24,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{topicId}")
-    public ResponseEntity<ResponseCreateComment> createComment(HttpServletRequest request,
-                                                               @RequestBody @Valid RequestCreateComment requestCreateComment,
+    public ResponseEntity<ResponseCreateComment> createComment(@RequestBody @Valid RequestCreateComment requestCreateComment,
                                                                @CookieValue(value = "browserId", required = false) String browserId,
                                                                @PathVariable Long topicId) {
-        return ResponseEntity.ok(commentService.createCommentService(request, requestCreateComment, browserId, topicId));
+        return ResponseEntity.ok(commentService.createCommentService(requestCreateComment, browserId, topicId));
     }
 
     @PostMapping("/like/{commentId}")

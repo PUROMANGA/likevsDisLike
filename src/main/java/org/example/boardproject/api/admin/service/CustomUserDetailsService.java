@@ -2,6 +2,8 @@ package org.example.boardproject.api.admin.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.admin.repository.AdminRepository;
+import org.example.boardproject.common.error.CustomRuntimeException;
+import org.example.boardproject.common.error.ErrorResponseStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +16,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return adminRepository.findByUsername(username);
+        return adminRepository.findByUsername(username).orElseThrow(() -> new CustomRuntimeException(ErrorResponseStatus.LOGIN_ERROR));
     }
 }

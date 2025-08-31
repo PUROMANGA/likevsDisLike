@@ -1,5 +1,5 @@
 ### 투표(좋아요)✅
-@topicId = 1
+@topicId = 2
 POST http://localhost:8080/votes/{{topicId}}
 Content-Type: application/json
 

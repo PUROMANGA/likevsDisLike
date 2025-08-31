@@ -1,5 +1,6 @@
 package org.example.boardproject.api.admin.controller;
 
+import io.micrometer.core.annotation.Timed;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
