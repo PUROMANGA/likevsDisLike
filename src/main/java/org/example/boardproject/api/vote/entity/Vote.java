@@ -17,20 +17,15 @@ public class Vote extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id")
-    private Topic topic;
-
+    private Long topicId;
     private String browserId;
-    private String ip;
 
     @Enumerated(EnumType.STRING)
     private VoteType voteType;
 
-    public Vote(Topic topic, String browserId, String ip, VoteType voteType) {
-        this.topic = topic;
+    public Vote(Long topicId, String browserId, VoteType voteType) {
+        this.topicId = topicId;
         this.browserId = browserId;
-        this.ip = ip;
         this.voteType = voteType;
     }
 }

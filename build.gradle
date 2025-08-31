@@ -50,6 +50,15 @@ dependencies {
 
     //prometheus
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    //AWS SDK for Java
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.4.0'
+
+    //uuid
+    implementation 'com.github.f4b6a3:uuid-creator:5.3.6'
+
+    //minio
+    implementation 'io.minio:minio:8.5.10'
 }
 
 tasks.named('test') {

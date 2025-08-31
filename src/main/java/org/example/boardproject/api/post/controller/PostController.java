@@ -1,6 +1,5 @@
 package org.example.boardproject.api.post.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.post.dto.RequestPwDto;
@@ -27,9 +26,8 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<ResponseCreatePost> createPost(
-            @RequestBody @Valid RequestCreatePost requestCreatePost,
-    HttpServletRequest request, @CookieValue(value = "browserId", required = false) String browserId) {
-        return ResponseEntity.ok(postService.createPostService(requestCreatePost, request, browserId));
+            @RequestBody @Valid RequestCreatePost requestCreatePost, @CookieValue(value = "browserId", required = false) String browserId) {
+        return ResponseEntity.ok(postService.createPostService(requestCreatePost, browserId));
     }
 
     @PatchMapping("/{postId}")
@@ -43,7 +41,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getAllPostService(pageable));
     }
 
-    @GetMapping("/{postId}")
+    @PostMapping("/{postId}")
     @PreAuthorize("hasRole('ADMIN') or @postGuard.matchedPostPassword(#postId, #requestPwDto.pw)")
     public ResponseEntity<ResponseGetPost> getPost(@PathVariable Long postId, @RequestBody @Valid RequestPwDto requestPwDto) {
         return ResponseEntity.ok(postService.getPostService(postId, requestPwDto));

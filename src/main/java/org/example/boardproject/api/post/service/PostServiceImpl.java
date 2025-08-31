@@ -1,6 +1,5 @@
 package org.example.boardproject.api.post.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.post.dto.RequestPwDto;
 import org.example.boardproject.api.post.dto.create.RequestCreatePost;
@@ -10,7 +9,8 @@ import org.example.boardproject.api.post.dto.update.RequestUpdatePost;
 import org.example.boardproject.api.post.dto.update.ResponseUpdatePost;
 import org.example.boardproject.api.post.entity.Post;
 import org.example.boardproject.api.post.repository.PostRepository;
-import org.example.boardproject.api.vote.common.VoteServiceHandler;
+import org.example.boardproject.common.error.CustomRuntimeException;
+import org.example.boardproject.common.error.ErrorResponseStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,20 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final VoteServiceHandler voteServiceHandler;
 
     /**
      * 게시글 생성
      * @param requestCreatePost
-     * @param request
      * @param browserId
      * @return
      */
     @Override
     @Transactional
-    public ResponseCreatePost createPostService(RequestCreatePost requestCreatePost, HttpServletRequest request, String browserId) {
-        String ip = voteServiceHandler.createIp(request);
-        Post post = new Post(requestCreatePost, ip, browserId);
+    public ResponseCreatePost createPostService(RequestCreatePost requestCreatePost, String browserId) {
+        Post post = new Post(requestCreatePost, browserId);
         postRepository.save(post);
         return new ResponseCreatePost(post);
     }
@@ -51,7 +48,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findByIdForUpdate(postId).orElseThrow(() -> new RuntimeException("postId not found"));
 
         if(!post.getPassword().equals(requestUpdatePost.getPassword())) {
-            throw new RuntimeException("password not match");
+            throw new CustomRuntimeException(ErrorResponseStatus.POST_PATCH_ERROR);
         }
 
         post.update(requestUpdatePost);

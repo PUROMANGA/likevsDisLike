@@ -25,7 +25,6 @@ public class Comment extends BaseEntity {
     private Topic topic;
 
     private String browserId;
-    private String ip;
 
     @Enumerated(EnumType.STRING)
     private VoteType voteType;
@@ -35,10 +34,9 @@ public class Comment extends BaseEntity {
     private Long likeCount;
     private Long disLikeCount;
 
-    public Comment(String ip, Topic topic, RequestCreateComment requestCreateComment, String browserId, VoteType voteType) {
+    public Comment(Topic topic, RequestCreateComment requestCreateComment, String browserId, VoteType voteType) {
         this.topic = topic;
         this.browserId = browserId;
-        this.ip = ip;
         this.voteType = voteType;
 
         if(requestCreateComment.getName() != null) {
@@ -66,13 +64,9 @@ public class Comment extends BaseEntity {
     public void increaseLikeCount() {
         this.likeCount++;
     }
-    public void decreaseLikeCount() {
-        this.likeCount--;
-    }
+
     public void increaseDisLikeCount() {
         this.disLikeCount++;
     }
-    public void decreaseDisLikeCount() {
-        this.disLikeCount--;
-    }
+
 }

@@ -1,6 +1,5 @@
 package org.example.boardproject.api.vote.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.vote.dto.RequestVoteCreateDto;
@@ -18,8 +17,7 @@ public class VoteController {
 
     @PostMapping("/{topicId}")
     public ResponseEntity<ResponseVoteCreateDto> createVote(
-            @PathVariable Long topicId, @RequestBody @Valid RequestVoteCreateDto requestVoteCreateDto,
-            HttpServletRequest request, @CookieValue(value = "browserId", required = false) String browserId) {
-        return ResponseEntity.ok(voteService.createVoteService(topicId, requestVoteCreateDto, request, browserId));
+            @PathVariable Long topicId, @RequestBody @Valid RequestVoteCreateDto requestVoteCreateDto, @CookieValue(value = "browserId", required = false) String browserId) {
+        return ResponseEntity.ok(voteService.createVoteService(topicId, requestVoteCreateDto, browserId));
     }
 }

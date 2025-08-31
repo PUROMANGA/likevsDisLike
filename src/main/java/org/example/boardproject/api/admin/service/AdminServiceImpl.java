@@ -4,8 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.boardproject.api.admin.dto.RequestLogin;
+import org.example.boardproject.api.admin.entity.Admin;
 import org.example.boardproject.api.admin.repository.AdminRepository;
+import org.example.boardproject.common.error.CustomRuntimeException;
+import org.example.boardproject.common.error.ErrorResponseStatus;
 import org.example.boardproject.common.security.SecurityHandler;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,13 +19,19 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
     private final SecurityHandler securityHandler;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void loginAdminService(RequestLogin requestLogin, HttpServletRequest request, HttpServletResponse response) {
-        if(!adminRepository.existsByUsername(requestLogin.getEmail())) {
-            throw new RuntimeException("not exists admin");
+
+        Admin admin = adminRepository.findByUsername(requestLogin.getEmail())
+                .orElseThrow(() -> new CustomRuntimeException(ErrorResponseStatus.LOGIN_ERROR));
+
+        if (!passwordEncoder.matches(requestLogin.getPassword(), admin.getPassword())) {
+            throw new CustomRuntimeException(ErrorResponseStatus.LOGIN_ERROR);
         }
+
         securityHandler.SetSecurityContext(requestLogin, request, response);
     }
 

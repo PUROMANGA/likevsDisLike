@@ -14,9 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
-
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = "200"))
     @Query("select p from Post p where p.id = :id")
     Optional<Post> findByIdForUpdate(Long id);
 }

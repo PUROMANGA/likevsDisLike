@@ -18,15 +18,13 @@ public class Post extends BaseEntity {
     private Long id;
 
     private String browserId;
-    private String ip;
     private String username;
     private String password;
     private String title;
     private String content;
 
-    public Post(RequestCreatePost requestCreatePost, String ip, String browserId) {
+    public Post(RequestCreatePost requestCreatePost, String browserId) {
         this.browserId = browserId;
-        this.ip = ip;
 
         if(!requestCreatePost.getUsername().isBlank()) {
             this.username = requestCreatePost.getUsername();

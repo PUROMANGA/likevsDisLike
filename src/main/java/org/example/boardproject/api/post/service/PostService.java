@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostService {
-    ResponseCreatePost createPostService(RequestCreatePost requestCreatePost, HttpServletRequest request, String browserId);
+    ResponseCreatePost createPostService(RequestCreatePost requestCreatePost, String browserId);
     ResponseUpdatePost updatePostService(RequestUpdatePost requestUpdatePost, Long postId);
     Page<ResponseGetPost> getAllPostService(Pageable pageable);
     ResponseGetPost getPostService(Long postId, RequestPwDto requestPwDto);
