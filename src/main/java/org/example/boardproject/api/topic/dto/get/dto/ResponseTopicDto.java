@@ -2,6 +2,7 @@ package org.example.boardproject.api.topic.dto.get.dto;
 
 import lombok.Getter;
 import org.example.boardproject.api.topic.entity.Topic;
+import org.example.boardproject.api.topic_count.entity.TopicCount;
 
 import java.time.LocalDateTime;
 
@@ -9,19 +10,21 @@ import java.time.LocalDateTime;
 public class ResponseTopicDto {
     private final Long id;
     private final String title;
-    private final Long likeCount;
-    private final Long dislikeCount;
-    private final Long engagementCount;
     private final String genre;
+    private final Long topicLikeCount;
+    private final Long topicDisLikeCount;
+    private final Long topicAllCount;
     private final LocalDateTime createdDate;
+    private final String imagePath;
 
-    public ResponseTopicDto(Topic topic) {
+    public ResponseTopicDto(Topic topic, TopicCount topicCount, String imagePath) {
         this.id = topic.getId();
         this.title = topic.getTitle();
-        this.likeCount = topic.getLikeCount();
-        this.dislikeCount = topic.getDislikeCount();
-        this.engagementCount = topic.getEngagementCount();
         this.genre = topic.getGenre().toString();
+        this.topicLikeCount = topicCount.getTopicLikeCount();
+        this.topicDisLikeCount = topicCount.getTopicDisLikeCount();
+        this.topicAllCount = topicCount.getTopicAllCount();
         this.createdDate = topic.getCreatedDate();
+        this.imagePath = imagePath;
     }
 }

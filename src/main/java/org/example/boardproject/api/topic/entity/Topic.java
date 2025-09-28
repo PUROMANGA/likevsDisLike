@@ -20,20 +20,11 @@ public class Topic extends BaseEntity {
 
     private String title;
 
-    private Long likeCount;
-
-    private Long dislikeCount;
-
-    private Long engagementCount;
-
     @Enumerated(EnumType.STRING)
     private Genre genre;
 
     public Topic(RequestCreateTopic requestCreateTopic) {
         this.title = requestCreateTopic.getTopicName();
-        this.likeCount = 0L;
-        this.dislikeCount = 0L;
-        this.engagementCount = 0L;
         this.genre = requestCreateTopic.getGenre();
     }
 

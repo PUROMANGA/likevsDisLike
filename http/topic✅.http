@@ -1,0 +1,51 @@
+@topicId=1
+
+### 토픽 만들기 : 어드민✅
+POST http://localhost:8080/topics/admin
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="request"; filename="request.json"
+Content-Type: application/json
+
+{
+  "topicName": "카라마조프가의 형제들",
+  "genre": "NOVEL"
+}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="5578801.png"
+Content-Type: image/png
+
+< C:\Users\82102\IdeaProjects\boardproject\image\5578801.png
+
+
+### 토픽 수정 : 어드민✅
+PATCH http://localhost:8080/topics/admin/{{topicId}}
+Content-Type: application/json
+
+{
+  "newTopicName": "활부",
+  "newGenre" : "NOVEL"
+}
+
+### 토픽 삭제 : 어드민✅
+DELETE http://localhost:8080/topics/admin/{{topicId}}
+
+### 메인페이지 : 인기토픽 조회✅
+GET http://localhost:8080/topics
+
+### 메인페이지 : 인기호감토픽 조회✅
+@rankingType=DISLIKE
+GET http://localhost:8080/topics/ranking?rankingType={{rankingType}}
+
+### 검색 : 특정 장르 검색✅
+@genre = NOVEL
+GET http://localhost:8080/topics/genres?genre={{genre}}
+
+### 검색 : 특정 타이틀 검색✅
+@title = 사랑과전쟁14
+GET http://localhost:8080/topics/titles?title={{title}}
+
+### 특정 토픽에 대한 페이지✅
+GET http://localhost:8080/topics/{{topicId}}

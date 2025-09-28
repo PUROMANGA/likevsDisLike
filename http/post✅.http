@@ -1,0 +1,53 @@
+@postId = 5
+
+### 게시판 문의글 작성✅
+POST http://localhost:8080/posts
+Content-Type: application/json
+
+{
+  "content": "부활이라는 토픽 신청합니다",
+  "password": "1234",
+  "title": "토픽 신청",
+  "username": ""
+}
+
+### 게시판 문의글 수정 성공✅
+PATCH http://localhost:8080/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "content": "활부라는 토픽 신청합니다",
+  "password": "1234",
+  "title": "토픽 신청",
+  "username": ""
+}
+
+### 게시판 문의글 수정 실패✅
+PATCH http://localhost:8080/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "content": "부활이라는 토픽 신청합니다",
+  "password": "4321",
+  "title": "토픽 신청",
+  "username": ""
+}
+
+### 게시판 문의글 전체 조회✅
+GET http://localhost:8080/posts
+
+### 게시판 문의글 특정 글 조회✅
+POST http://localhost:8080/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "pw" : "1234"
+}
+
+### 게시판 문의글 삭제✅
+DELETE http://localhost:8080/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "pw" : "1234"
+}

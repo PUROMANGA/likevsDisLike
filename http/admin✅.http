@@ -1,0 +1,12 @@
+### 로그인 기능✅
+POST http://localhost:8080/admin/login
+Content-Type: application/json
+
+{
+  "email": "test@naver.com",
+  "password": "test1234"
+}
+
+### 로그아웃 기능✅
+POST http://localhost:8080/admin/logout
+Content-Type: application/json
